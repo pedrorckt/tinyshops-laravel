@@ -11,7 +11,7 @@ class UpdateShopRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return (auth()->user()->shop_id === $this->route('shop')->id);
     }
 
     /**
@@ -22,7 +22,7 @@ class UpdateShopRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:255',
         ];
     }
 }

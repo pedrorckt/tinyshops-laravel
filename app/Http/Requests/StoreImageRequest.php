@@ -11,7 +11,7 @@ class StoreImageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return (auth()->user()->shop_id === $this->route('image')->shop_id);
     }
 
     /**
@@ -22,7 +22,8 @@ class StoreImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'product_id' => 'required|exists:products,id',
+            'url' => 'required|url|max:255',
         ];
     }
 }

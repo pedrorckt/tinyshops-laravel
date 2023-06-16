@@ -3,64 +3,55 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
-use App\Http\Requests\StoreImagesRequest;
-use App\Http\Requests\UpdateImagesRequest;
+use App\Http\Requests\StoreImageRequest;
+use App\Http\Requests\UpdateImageRequest;
 
 class ImageController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $images = Image::paginate(8);
+        return $images;
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreImagesRequest $request)
+    public function store(StoreImageRequest $request)
     {
-        //
+        $image = Image::create($request->all());
+        return $image;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Images $images)
+    public function show(Image $image)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Images $images)
-    {
-        //
+        return $image;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateImagesRequest $request, Images $images)
+    public function update(UpdateImageRequest $request, Image $image)
     {
-        //
+        $image->update($request->all());
+        return $image;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Images $images)
+    public function destroy(Image $image)
     {
-        //
+        $image->delete();
     }
 }

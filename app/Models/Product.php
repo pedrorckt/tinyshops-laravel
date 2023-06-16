@@ -9,7 +9,9 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'description', 'price', 'shop_id'];
+    protected $casts = ['is_pinned' => 'boolean', ];
+
+    protected $fillable = ['name', 'slug', 'description', 'price', 'shop_id', 'image', 'is_pinned', ];
 
     public function shop()
     {
@@ -19,6 +21,11 @@ class Product extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
     }
 
 }

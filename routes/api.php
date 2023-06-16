@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+Route::middleware(['auth:sanctum'])->get('/me', function (Request $request) {
     return $request->user();
 });
+
+Route::resources([
+    'shops' => 'App\Http\Controllers\ShopController',
+    'users' => 'App\Http\Controllers\UserController',
+    'products' => 'App\Http\Controllers\ProductController',
+    'categories' => 'App\Http\Controllers\CategoryController',
+], [
+    'except' => ['create', 'edit'],
+]);

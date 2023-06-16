@@ -8,20 +8,18 @@ use App\Http\Requests\UpdateProductRequest;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $products = Product::with(['categories'])->paginate(8);
+        return $products;
     }
 
     /**
@@ -29,7 +27,12 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        //
+        $user = $request->user();
+        $request->merge(['shop_id' => $user->shop_id]);
+        $slug = str_replace(' ', '-', strtolower($request->name));
+        $request->merge(['slug' => $slug]);
+        $product = Product::create($request->all());
+        return $product;
     }
 
     /**
@@ -37,15 +40,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
+        return $product->load(['categories','images']);
     }
 
     /**
@@ -53,7 +48,8 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $product->update($request->all());
+        return $product;
     }
 
     /**
@@ -61,6 +57,10 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $user = auth()->user();
+        if ($user->shop_id !== $product->shop_id) {
+            abort(403, 'Unauthorized action.');
+        }
+        $product->delete();
     }
 }

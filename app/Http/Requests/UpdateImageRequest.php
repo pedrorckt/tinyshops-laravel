@@ -11,7 +11,7 @@ class UpdateImageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return (auth()->user()->shop_id === $this->route('image')->shop_id);
     }
 
     /**
@@ -22,7 +22,7 @@ class UpdateImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'url' => 'required|url|max:255',
         ];
     }
 }
