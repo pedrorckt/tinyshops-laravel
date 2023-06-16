@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Images;
+use App\Models\Image;
 use App\Http\Requests\StoreImagesRequest;
 use App\Http\Requests\UpdateImagesRequest;
 
-class ImagesController extends Controller
+class ImageController extends Controller
 {
     /**
      * Display a listing of the resource.

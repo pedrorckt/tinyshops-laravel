@@ -19,12 +19,12 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductSeeder::class);
 
         $this->call(ImageSeeder::class);
-        
-        \App\Models\User::factory(1_000)->create();
 
-        \App\Models\User::factory()->create([
+        User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+        
+        
     }
 }
