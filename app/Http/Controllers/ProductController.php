@@ -32,7 +32,7 @@ class ProductController extends Controller
             }
             $products = Product::with(['categories'])->orderBy($request->input('orderby'), $request->input('order'))->paginate(8);
         } else {
-            $products = Product::with(['categories'])->orderBy('is_pinned', 'asc')->paginate(8);
+            $products = Product::with(['categories'])->orderBy('is_pinned', 'desc')->paginate(8);
         }
         return $products;
     }
@@ -77,5 +77,12 @@ class ProductController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $product->delete();
+    }
+
+    public function me() {
+        $user = auth()->user();
+        $products = Product::where('shop_id', $user->shop_id)->paginate(8);
+        $user->products = $products;
+        return $user;
     }
 }
