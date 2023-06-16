@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -16,9 +20,20 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with(['categories'])->paginate(8);
+        if ($request->has('orderby')) {
+            $validated = Validator::make($request->all(), [
+                'orderby' => 'in:name,price',
+                'order' => 'in:asc,desc'
+            ]);
+            if ($validated->fails()) {
+                return response()->json($validated->errors(), 422);
+            }
+            $products = Product::with(['categories'])->orderBy($request->input('orderby'), $request->input('order'))->paginate(8);
+        } else {
+            $products = Product::with(['categories'])->orderBy('is_pinned', 'asc')->paginate(8);
+        }
         return $products;
     }
 
