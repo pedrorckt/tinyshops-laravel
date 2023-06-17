@@ -8,6 +8,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -22,6 +23,12 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+        if ($request->has('ids')) {
+            $ids = explode(',', $request->input('ids'));
+            // $ids_ordered = implode(',', $ids);
+            $products = Product::whereIn('id', $ids)->orderByRaw("FIELD(id, $request->input('ids'))")->paginate(8);
+            return $products;
+        }
         if ($request->has('orderby')) {
             $validated = Validator::make($request->all(), [
                 'orderby' => 'in:name,price',
@@ -44,7 +51,7 @@ class ProductController extends Controller
     {
         $user = $request->user();
         $request->merge(['shop_id' => $user->shop_id]);
-        $slug = str_replace(' ', '-', strtolower($request->name));
+        $slug = str_replace(' ', '-', strtolower($request->name)) . '-' . rand(1000,9999);
         $request->merge(['slug' => $slug]);
         $product = Product::create($request->all());
         return $product;

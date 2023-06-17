@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Shop;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -28,6 +29,7 @@ class RegisteredUserController extends Controller
 
         $shop = new Shop();
         $shop->name = $request->name . "'s Shop";
+        $shop->slug = str_replace(' ', '-', strtolower($request->name)) . 's-shop-' . rand(1000,9999);
         $shop->save();
 
         $user = User::create([
