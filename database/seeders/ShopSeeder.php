@@ -15,6 +15,6 @@ class ShopSeeder extends Seeder
      */
     public function run(): void
     {
-        Shop::factory(1_000)->has(User::factory()->count(1))->create();
+        Shop::factory(10_000)->has(User::factory()->count(1))->create();
     }
 }

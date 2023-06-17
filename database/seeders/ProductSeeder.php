@@ -16,7 +16,7 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         DB::disableQueryLog();
-        Product::factory(10_000)->create()->each(function ($product) {
+        Product::factory(100_000)->create()->each(function ($product) {
             $product->categories()->attach([rand(1, 22), rand(1, 22)]);
         });
     }

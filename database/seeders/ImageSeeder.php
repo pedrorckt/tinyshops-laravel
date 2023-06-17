@@ -16,6 +16,6 @@ class ImageSeeder extends Seeder
     public function run(): void
     {
         DB::disableQueryLog();
-        Image::factory(2_000)->create();
+        Image::factory(200_000)->create();
     }
 }

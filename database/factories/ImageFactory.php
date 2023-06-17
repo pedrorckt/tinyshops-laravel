@@ -17,8 +17,8 @@ class ImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'product_id' => fake()->numberBetween(1, 10_000),
-            'url' => fake()->imageUrl(),
+            'product_id' => fake()->numberBetween(1, 100_000),
+            'url' => 'https://picsum.photos/seed/' . rand(1, 1000) . '/1280/720',
         ];
     }
 }
